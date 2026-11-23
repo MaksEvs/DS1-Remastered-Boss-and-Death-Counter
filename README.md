@@ -1,31 +1,36 @@
 # DS1 Remastered Boss Counter
 
-Приложение автоматически считает 26 основных боссов Dark Souls Remastered, включая Artorias of the Abyss.
+A small Windows app that automatically counts the 26 main bosses in Dark Souls Remastered, including the Artorias of the Abyss DLC. Mini-bosses such as the Hydra are not included.
 
-## Запуск
+## Requirements
 
-Требуется Windows и установленный **Microsoft Edge WebView2 Runtime**. Обычно он уже есть в Windows 11 и большинстве актуальных установок Windows 10. Если окно приложения не открывается, установите Runtime со [страницы Microsoft WebView2](https://developer.microsoft.com/microsoft-edge/webview2/), раздел **Evergreen Standalone Installer**, архитектура x64.
+- Windows 10 or 11, 64-bit
+- Dark Souls Remastered
+- Microsoft Edge WebView2 Runtime
 
-1. Запустите Dark Souls Remastered и загрузите персонажа в игровой мир.
-2. Запустите `ds1-death-counter.exe`.
-3. В окне приложения проверьте статус подключения и текущий счётчик.
+WebView2 Runtime is preinstalled on most Windows 11 and current Windows 10 systems. If the app window does not open, install the **Evergreen Standalone Installer (x64)** from the [Microsoft WebView2 download page](https://developer.microsoft.com/microsoft-edge/webview2/).
 
-Счётчик вычисляется по флагам боссов текущего загруженного персонажа. Приложение читает event flags из памяти игры только для чтения; файл сохранения не открывается и не изменяется. При переключении персонажа игра загружает его состояние, и счётчик обновляется по флагам нового сейва.
+## Download and run
 
-## OBS
+1. Download `ds1-death-counter.exe` from the [latest GitHub Release](https://github.com/MaksEvs/DS1-Remastered-Boss-Counter/releases/latest).
+2. Start Dark Souls Remastered and load a character into the game world.
+3. Run `ds1-death-counter.exe`.
+4. Check the connection status and boss count in the app window.
 
-Добавьте в OBS источник **Browser Source** с адресом:
+The counter reads boss event flags for the currently loaded character from the game's memory. It does not open or modify save files. When you switch characters, the count updates to match the newly loaded save. Keep the app running while using the OBS overlay.
 
-```text
-http://127.0.0.1:7373/obs.html?v=9
-```
+## OBS setup
 
-Overlay обновляется автоматически раз в секунду. Для OBS не нужно запускать отдельный сервер или терминал.
+1. In OBS, add a **Browser Source**.
+2. Set its URL to:
 
-## Диагностика
+   ```text
+   http://127.0.0.1:7373/obs.html?v=9
+   ```
 
-Если нужно проверить подключение и отдельные флаги, запустите приложение из PowerShell с параметром `--diagnostic`:
+The overlay uses a transparent background and refreshes automatically once per second. The counter app must be running for the overlay to receive updates.
 
-```powershell
-.\ds1-death-counter.exe --diagnostic
-```
+## References
+
+- [DS1 Item Tracker — boss event flag IDs](https://github.com/MaiAndr/Ds1ItemTracker)
+- [DSAP — event flag memory and address research](https://github.com/tathxo/DSAP)
