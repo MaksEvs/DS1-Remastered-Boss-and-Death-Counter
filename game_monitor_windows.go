@@ -22,9 +22,70 @@ func startGameMonitor(applicationState *applicationState) {
 
 			applicationState.updateGameStatus(true)
 			applicationState.updateKilledCount(countTrueFlags(currentFlags))
+			if currentDeaths, err := readGameDeathCount(); err == nil {
+				applicationState.observeGameDeaths(currentDeaths)
+			}
 			_ = saveApplicationState(applicationState)
 		}
 	}()
+}
+
+func (s *applicationState) observeGameDeaths(current uint32) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if s.HasGameDeathBaseline && current == s.LastGameDeaths+1 {
+		s.Deaths++
+	}
+	s.LastGameDeaths = current
+	s.HasGameDeathBaseline = true
+}
+
+func readGameDeathCount() (uint32, error) {
+	processID, err := findGameProcessID()
+	if err != nil {
+		return 0, err
+	}
+
+	reader, err := connectToGame(processID)
+	if err != nil {
+		return 0, err
+	}
+	defer reader.close()
+
+	// Locate GameDataMan through its code signature.
+	pattern := []byte{0x48, 0x8B, 0x05, 0, 0, 0, 0, 0x48, 0x8B, 0x50, 0x10, 0x48, 0x89, 0x54, 0x24, 0x60}
+	wildcards := map[int]bool{
+		3: true,
+		4: true,
+		5: true,
+		6: true,
+	}
+	instructionAddress, err := reader.scan(pattern, wildcards)
+	if err != nil {
+		return 0, fmt.Errorf("GameDataMan signature: %w", err)
+	}
+
+	displacementBytes, err := reader.read(instructionAddress+3, 4)
+	if err != nil {
+		return 0, err
+	}
+	displacement := int64(int32(binary.LittleEndian.Uint32(displacementBytes)))
+	globalPointerAddress := uintptr(int64(instructionAddress+7) + displacement)
+	gameDataManagerBytes, err := reader.read(globalPointerAddress, 8)
+	if err != nil {
+		return 0, err
+	}
+	gameDataManagerAddress := uintptr(binary.LittleEndian.Uint64(gameDataManagerBytes))
+	if gameDataManagerAddress < 0x10000 {
+		return 0, fmt.Errorf("invalid GameDataMan pointer 0x%x", gameDataManagerAddress)
+	}
+
+	deathCountBytes, err := reader.read(gameDataManagerAddress+0x98, 4)
+	if err != nil {
+		return 0, err
+	}
+	return binary.LittleEndian.Uint32(deathCountBytes), nil
 }
 
 func readBossFlagsFromGame() (map[int]bool, error) {

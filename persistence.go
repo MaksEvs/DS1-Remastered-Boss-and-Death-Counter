@@ -35,6 +35,11 @@ func loadApplicationState(applicationState *applicationState) {
 	if savedState.Killed >= 0 && savedState.Killed <= totalBossCount {
 		applicationState.Killed = savedState.Killed
 	}
+	if savedState.Deaths >= 0 {
+		applicationState.Deaths = savedState.Deaths
+	}
+	applicationState.LastGameDeaths = savedState.LastGameDeaths
+	applicationState.HasGameDeathBaseline = savedState.HasGameDeathBaseline
 }
 
 func saveApplicationState(applicationState *applicationState) error {

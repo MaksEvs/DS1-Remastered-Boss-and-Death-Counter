@@ -9,14 +9,24 @@ import (
 const totalBossCount = 26
 
 type applicationState struct {
-	mu            sync.RWMutex
-	Label         string `json:"label"`
-	Killed        int    `json:"killed"`
-	GameConnected bool   `json:"connected"`
+	mu                   sync.RWMutex
+	Label                string `json:"label"`
+	Killed               int    `json:"killed"`
+	Deaths               int    `json:"deaths"`
+	LastGameDeaths       uint32 `json:"lastGameDeaths"`
+	HasGameDeathBaseline bool   `json:"hasGameDeathBaseline"`
+	GameConnected        bool   `json:"connected"`
 }
 
 func newApplicationState() *applicationState {
 	return &applicationState{Label: "Боссов убито"}
+}
+
+func (s *applicationState) deathText() string {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	return fmt.Sprintf("Смерти: %d", s.Deaths)
 }
 
 func (s *applicationState) obsText() string {
@@ -36,10 +46,13 @@ func (s *applicationState) snapshot() stateSnapshot {
 	defer s.mu.RUnlock()
 
 	return stateSnapshot{
-		Label:         s.Label,
-		Killed:        s.Killed,
-		Total:         totalBossCount,
-		GameConnected: s.GameConnected,
+		Label:                s.Label,
+		Killed:               s.Killed,
+		Deaths:               s.Deaths,
+		LastGameDeaths:       s.LastGameDeaths,
+		HasGameDeathBaseline: s.HasGameDeathBaseline,
+		Total:                totalBossCount,
+		GameConnected:        s.GameConnected,
 	}
 }
 
@@ -58,8 +71,11 @@ func (s *applicationState) updateGameStatus(connected bool) {
 }
 
 type stateSnapshot struct {
-	Label         string `json:"label"`
-	Killed        int    `json:"killed"`
-	Total         int    `json:"total"`
-	GameConnected bool   `json:"connected"`
+	Label                string `json:"label"`
+	Killed               int    `json:"killed"`
+	Total                int    `json:"total"`
+	Deaths               int    `json:"deaths"`
+	LastGameDeaths       uint32 `json:"lastGameDeaths"`
+	HasGameDeathBaseline bool   `json:"hasGameDeathBaseline"`
+	GameConnected        bool   `json:"connected"`
 }

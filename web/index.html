@@ -3,22 +3,30 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>DS1 Boss Counter</title>
+    <title>DS1 Remastered Boss &amp; Death Counter</title>
     <link rel="stylesheet" href="/web/styles.css">
 </head>
 <body>
     <main class="card">
         <div class="status" id="status">Поиск игры…</div>
-        <div class="count" id="count">0/26</div>
-        <label for="label">Подпись в OBS</label>
-        <div class="row">
-            <input id="label" value="Боссов убито">
-            <button id="save-label">Сохранить</button>
-        </div>
-        <div class="url">
-            Текст для OBS: <code>http://127.0.0.1:7373/obs.html?v=9</code><br>
-            <small>Добавьте этот URL как Browser Source.</small>
-        </div>
+        <nav class="tabs"><button class="tab active" data-tab="bosses">Боссы</button><button class="tab secondary" data-tab="deaths">Смерти</button></nav>
+        <section id="bosses" class="panel">
+            <div class="count" id="count">0/26</div>
+            <label for="label">Подпись в OBS</label>
+            <div class="row">
+                <input id="label" value="Боссов убито">
+                <button id="save-label">Сохранить</button>
+            </div>
+            <div class="url">
+                Текст для OBS: <code>http://127.0.0.1:7373/obs.html?v=9</code><br>
+                <small>Добавьте этот URL как Browser Source.</small>
+            </div>
+        </section>
+        <section id="deaths" class="panel" hidden>
+            <div class="count" id="death-count">0</div>
+            <div class="controls death-controls"><button id="death-minus" class="secondary">−</button><input id="death-input" type="number" min="0" value="0"><button id="death-plus">+1</button><button id="death-save" class="secondary">Установить</button><button id="death-reset" class="secondary">Обнулить</button></div>
+            <div class="url">Текст для OBS: <code>http://127.0.0.1:7373/deaths.html</code><br><small>Добавьте этот URL как Browser Source.</small></div>
+        </section>
     </main>
     <script src="/web/app.js"></script>
 </body>

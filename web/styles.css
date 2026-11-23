@@ -16,6 +16,40 @@ body {
     padding: 16px 28px 8px;
 }
 
+.tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.tab {
+    flex: 1;
+}
+
+.tab.active {
+    background: #b78949;
+    color: #17120b;
+}
+
+.tab:not(.active):hover {
+    background: #b78949;
+    color: #17120b;
+}
+
+.panel[hidden] {
+    display: none;
+}
+
+.death-controls {
+    align-items: center;
+}
+
+.death-controls input {
+    width: 100px;
+    flex: 0 1 100px;
+    text-align: center;
+}
+
 .count {
     margin: 18px 0;
     font-size: 64px;
@@ -24,8 +58,9 @@ body {
 }
 
 .status {
-    margin: 8px 0 16px;
+    margin: 4px 0 12px;
     color: #aaa;
+    font-weight: 700;
 }
 
 label {
@@ -49,15 +84,28 @@ button {
     padding: 10px 14px;
     border: 0;
     border-radius: 8px;
-    background: #b78949;
-    color: #17120b;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-button.secondary {
     background: #444750;
     color: #eee;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 120ms ease, color 120ms ease, box-shadow 120ms ease;
+}
+
+button:hover,
+button:focus-visible,
+button.is-pressed {
+    background: #b78949;
+    color: #17120b;
+}
+
+button:focus-visible {
+    outline: 2px solid #f0c77d;
+    outline-offset: 2px;
+}
+
+button:active,
+button.is-pressed {
+    box-shadow: 0 0 0 2px rgba(240, 199, 125, 0.45);
 }
 
 .row,

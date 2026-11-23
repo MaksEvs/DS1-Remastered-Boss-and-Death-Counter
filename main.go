@@ -27,6 +27,9 @@ func main() {
 
 	go startHTTPServer(server)
 	runDesktopWindow(server)
+	if err := saveApplicationState(applicationState); err != nil {
+		log.Printf("Could not save application state on exit: %v", err)
+	}
 }
 
 func startHTTPServer(server *http.Server) {

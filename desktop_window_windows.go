@@ -16,7 +16,7 @@ func runDesktopWindow(server *http.Server) {
 	}
 	defer window.Destroy()
 
-	window.SetTitle("DS1 Remastered — Boss Counter")
+	window.SetTitle("DS1 Remastered Boss & Death Counter")
 	window.SetSize(520, 360, webview.HintNone)
 	window.Navigate("http://" + server.Addr)
 	window.Run()
