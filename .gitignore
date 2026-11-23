@@ -1,0 +1,15 @@
+# Build outputs
+*.exe
+*.dll
+*.pdb
+build/
+dist/
+
+# Go workspace and editor files
+go.work
+go.work.sum
+.vscode/
+.idea/
+
+# Local runtime state
+state.json

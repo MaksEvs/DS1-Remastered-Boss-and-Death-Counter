@@ -1,0 +1,81 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background: #101114;
+    color: #eee;
+    font: 16px system-ui, sans-serif;
+}
+
+.card {
+    width: min(520px, 92vw);
+    margin: 0 auto;
+    padding: 16px 28px 8px;
+}
+
+.count {
+    margin: 18px 0;
+    font-size: 64px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.status {
+    margin: 8px 0 16px;
+    color: #aaa;
+}
+
+label {
+    display: block;
+    margin-bottom: 7px;
+    color: #bbb;
+}
+
+input {
+    flex: 1;
+    min-width: 0;
+    padding: 11px;
+    border: 1px solid #4a4d57;
+    border-radius: 8px;
+    background: #111;
+    color: white;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 8px;
+    background: #b78949;
+    color: #17120b;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+button.secondary {
+    background: #444750;
+    color: #eee;
+}
+
+.row,
+.controls {
+    display: flex;
+    gap: 10px;
+}
+
+.url {
+    margin-top: 14px;
+    color: #aaa;
+    font-size: 14px;
+}
+
+.url code {
+    color: #5ca9ff;
+}
+
+small {
+    color: #888;
+}
